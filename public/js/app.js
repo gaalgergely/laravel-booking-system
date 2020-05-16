@@ -1990,6 +1990,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Bookables",
@@ -1999,13 +2007,27 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       bookables: [],
-      loading: false
+      loading: false,
+      columns: 3
     };
+  },
+  computed: {
+    rows: function rows() {
+      return Math.ceil(this.bookables.length / this.columns);
+    }
   },
 
   /*beforeCreate() {
       console.log('before create');
   },*/
+  methods: {
+    bookablesInRow: function bookablesInRow(row) {
+      return this.bookables.slice((row - 1) * this.columns, row * this.columns);
+    },
+    placeholdersInRow: function placeholdersInRow(row) {
+      return this.columns - this.bookablesInRow(row).length;
+    }
+  },
   created: function created() {
     var _this = this;
 
@@ -37750,17 +37772,42 @@ var render = function() {
           _vm.bookables.length
             ? _c(
                 "div",
-                _vm._l(_vm.bookables, function(bookable, index) {
-                  return _c("bookable-list-item", {
-                    key: index,
-                    attrs: {
-                      "item-title": bookable.title,
-                      "item-content": bookable.content,
-                      "item-price": bookable.price
-                    }
-                  })
+                _vm._l(_vm.rows, function(row) {
+                  return _c(
+                    "div",
+                    { key: "row" + row, staticClass: "row mb-4" },
+                    [
+                      _vm._l(_vm.bookablesInRow(row), function(
+                        bookable,
+                        column
+                      ) {
+                        return _c(
+                          "div",
+                          { key: "row" + row + column, staticClass: "col" },
+                          [
+                            _c("bookable-list-item", {
+                              attrs: {
+                                "item-title": bookable.title,
+                                "item-content": bookable.content,
+                                "item-price": bookable.price
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      }),
+                      _vm._v(" "),
+                      _vm._l(_vm.placeholdersInRow(row), function(placeholder) {
+                        return _c("div", {
+                          key: "placeholder" + row + placeholder,
+                          staticClass: "col"
+                        })
+                      })
+                    ],
+                    2
+                  )
                 }),
-                1
+                0
               )
             : _c("div", [_vm._v("No data.")])
         ])

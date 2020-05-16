@@ -5,13 +5,21 @@
         <div v-if="loading">Loading...</div>
         <div v-else>
             <div v-if="bookables.length">
-                <bookable-list-item
-                    v-for="(bookable, index) in bookables"
-                    :key="index"
-                    :item-title="bookable.title"
-                    :item-content="bookable.content"
-                    :item-price="bookable.price"
-                ></bookable-list-item>
+                <div class="row mb-4" v-for="row in rows" :key="'row' + row">
+                    <div
+                        class="col"
+                        v-for="(bookable, column) in bookablesInRow(row)"
+                        :key="'row' + row + column"
+                    >
+                        <bookable-list-item
+                            :item-title="bookable.title"
+                            :item-content="bookable.content"
+                            :item-price="bookable.price"
+                        ></bookable-list-item>
+                    </div>
+
+                    <div class="col" v-for="placeholder in placeholdersInRow(row)" :key="'placeholder' + row + placeholder"></div>
+                </div>
             </div>
             <div v-else>No data.</div>
         </div>
@@ -29,13 +37,30 @@
         data() {
           return {
               bookables: [],
-              loading: false
+              loading: false,
+              columns: 3
+          }
+        },
+
+        computed: {
+          rows() {
+              return Math.ceil(this.bookables.length / this.columns);
           }
         },
 
         /*beforeCreate() {
             console.log('before create');
         },*/
+
+        methods: {
+            bookablesInRow(row) {
+                return this.bookables.slice((row-1) * this.columns, row * this.columns);
+            },
+
+            placeholdersInRow(row) {
+                return this.columns - this.bookablesInRow(row).length
+            }
+        },
 
         created() {
             /**
