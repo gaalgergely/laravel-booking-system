@@ -1952,7 +1952,7 @@ __webpack_require__.r(__webpack_exports__);
   name: "BookableListItem",
   props: {
     itemTitle: String,
-    itemContent: String,
+    itemDescription: String,
     itemPrice: Number
   }
 });
@@ -2034,52 +2034,11 @@ __webpack_require__.r(__webpack_exports__);
     /**
      * good place to fetch data
      */
-    console.log('created');
     this.loading = true;
-    setTimeout(function () {
-      _this.bookables = [{
-        id: 1,
-        title: "Cheap villa",
-        content: "A very cheap villa",
-        price: 1000
-      }, {
-        id: 2,
-        title: "Cheap villa 2",
-        content: "A very cheap villa 2",
-        price: 1500
-      }, {
-        id: 3,
-        title: "Cheap villa",
-        content: "A very cheap villa",
-        price: 1000
-      }, {
-        id: 4,
-        title: "Cheap villa 2",
-        content: "A very cheap villa 2",
-        price: 1500
-      }, {
-        id: 5,
-        title: "Cheap villa",
-        content: "A very cheap villa",
-        price: 1000
-      }, {
-        id: 6,
-        title: "Cheap villa 2",
-        content: "A very cheap villa 2",
-        price: 1500
-      }, {
-        id: 7,
-        title: "Cheap villa",
-        content: "A very cheap villa",
-        price: 1000
-      }, {
-        id: 8,
-        title: "Cheap villa 2",
-        content: "A very cheap villa 2",
-        price: 1500
-      }];
+    axios.get('/api/bookables').then(function (response) {
+      _this.bookables = response.data;
       _this.loading = false;
-    }, 1500);
+    });
   },
 
   /*beforeMount() {
@@ -37728,12 +37687,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "card mb-2" }, [
+  return _c("div", { staticClass: "card mb-2 w-100" }, [
     _c("div", { staticClass: "card-body" }, [
       _c("h5", { staticClass: "card-title" }, [_vm._v(_vm._s(_vm.itemTitle))]),
       _vm._v(" "),
       _c("p", { staticClass: "card-text" }, [
-        _vm._v(_vm._s(_vm.itemContent)),
+        _vm._v(_vm._s(_vm.itemDescription)),
         _c("br"),
         _vm._v(" "),
         _c("small", [_vm._v(_vm._s(_vm.itemPrice))])
@@ -37783,12 +37742,15 @@ var render = function() {
                       ) {
                         return _c(
                           "div",
-                          { key: "row" + row + column, staticClass: "col" },
+                          {
+                            key: "row" + row + column,
+                            staticClass: "col d-flex align-items-stretch"
+                          },
                           [
                             _c("bookable-list-item", {
                               attrs: {
                                 "item-title": bookable.title,
-                                "item-content": bookable.content,
+                                "item-description": bookable.description,
                                 "item-price": bookable.price
                               }
                             })

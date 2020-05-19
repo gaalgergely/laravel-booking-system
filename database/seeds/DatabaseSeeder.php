@@ -12,5 +12,22 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UserSeeder::class);
+
+        /*$this->call([
+            UserSeeder::class,
+            BookablesTableSeeder::class
+        ]);*/
+
+        /**
+         * ERROR:
+         * Target class [BookablesTableSeeder] does not exist.
+         *
+         * Solution:
+         * composer dump-autoload
+         *
+         * only use this CLI in development!
+         * php artisan migrate:refresh --seed
+         */
+        $this->call(BookablesTableSeeder::class);
     }
 }

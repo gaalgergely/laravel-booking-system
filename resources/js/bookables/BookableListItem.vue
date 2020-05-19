@@ -1,8 +1,8 @@
 <template>
-    <div class="card mb-2">
+    <div class="card mb-2 w-100">
         <div class="card-body">
             <h5 class="card-title">{{ itemTitle }}</h5>
-            <p class="card-text">{{ itemContent }}<br>
+            <p class="card-text">{{ itemDescription }}<br>
                 <small>{{ itemPrice }}</small>
             </p>
         </div>
@@ -15,7 +15,7 @@
 
         props: {
             itemTitle: String,
-            itemContent: String,
+            itemDescription: String,
             itemPrice: Number
         }
     }
