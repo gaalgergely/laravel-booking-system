@@ -11,11 +11,7 @@
                         v-for="(bookable, column) in bookablesInRow(row)"
                         :key="'row' + row + column"
                     >
-                        <bookable-list-item
-                            :item-title="bookable.title"
-                            :item-description="bookable.description"
-                            :item-price="bookable.price"
-                        ></bookable-list-item>
+                        <bookable-list-item v-bind="bookables"></bookable-list-item>
                     </div>
 
                     <div class="col" v-for="placeholder in placeholdersInRow(row)" :key="'placeholder' + row + placeholder"></div>
@@ -71,7 +67,7 @@
 
             axios.get('/api/bookables')
                 .then(response => {
-                    this.bookables = response.data;
+                    this.bookables = response.data.data;
                     this.loading = false;
                 });
         },

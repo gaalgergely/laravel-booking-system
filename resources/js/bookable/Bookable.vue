@@ -1,0 +1,43 @@
+<template>
+    <div class="row" v-if="!loading">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2>{{ bookable.title }}</h2>
+                    <hr />
+                    <article>{{ bookable.description }}</article>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            availabilitiy & prices
+        </div>
+    </div>
+    <div v-else>Loading ...</div>
+</template>
+
+<script>
+    export default {
+        name: "Bookable",
+
+        data() {
+            return {
+                bookable: null,
+                loading: true
+            };
+        },
+
+        created() {
+            this.loading = true;
+            axios.get('/api/bookables/' + this.$route.params.id)
+                .then(response => {
+                    this.bookable = response.data.data;
+                    this.loading = false;
+                });
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
