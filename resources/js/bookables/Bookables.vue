@@ -39,7 +39,7 @@
         },
 
         computed: {
-          rows() {
+          rows: function () {
               return Math.ceil(this.bookables.length / this.columns);
           }
         },

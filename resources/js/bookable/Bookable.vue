@@ -9,16 +9,22 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            availabilitiy & prices
+        <div class="col-md-4 pb-4">
+            <availability></availability>
         </div>
     </div>
     <div v-else>Loading ...</div>
 </template>
 
 <script>
+    import Availability from "./Availability";
+
     export default {
         name: "Bookable",
+
+        components: {
+            Availability
+        },
 
         data() {
             return {
