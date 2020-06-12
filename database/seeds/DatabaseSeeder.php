@@ -18,12 +18,13 @@ class DatabaseSeeder extends Seeder
          * Solution:
          * composer dump-autoload
          *
-         * only use the above CLI command in development!
+         * only use the below CLI command in development!
          * php artisan migrate:refresh --seed
          */
         $this->call([
             BookablesTableSeeder::class,
-            BookingsTableSeeder::class
+            BookingsTableSeeder::class,
+            ReviewsTableSeeder::class
         ]);
     }
 }
