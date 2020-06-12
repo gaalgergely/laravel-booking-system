@@ -11,7 +11,7 @@
                         v-for="(bookable, column) in bookablesInRow(row)"
                         :key="'row' + row + column"
                     >
-                        <bookable-list-item v-bind="bookables"></bookable-list-item>
+                        <bookable-list-item v-bind="bookable"></bookable-list-item>
                     </div>
 
                     <div class="col" v-for="placeholder in placeholdersInRow(row)" :key="'placeholder' + row + placeholder"></div>
