@@ -1,7 +1,7 @@
 <template>
     <div style="padding: 1.25rem">
         <h6 class="text-uppercase text-secondary font-weight-bolder pt-4">Review List</h6>
-        <star-rating :rating="rating" class="fa-3x"></star-rating>
+        <star-rating :value="rating" class="fa-3x"></star-rating>
         <div v-if="loading">Loading ...</div>
         <div v-else>
             <div class="border-bottom d-none d-md-block" v-for="(review, index) in reviews" :key="index">
@@ -10,7 +10,7 @@
                         {{ review.name }}
                     </div>
                     <div class="col-md-6 d-flex justify-content-end">
-                        <star-rating :rating="review.rating" class="fa-lg"></star-rating>
+                        <star-rating :value="review.rating" class="fa-lg"></star-rating>
                     </div>
                 </div>
                 <div class="row">
