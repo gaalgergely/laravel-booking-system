@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Booking;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BookingByReview;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,6 +19,6 @@ class BookingByReviewController extends Controller
      */
     public function __invoke($reviewKey, Request $request)
     {
-        return Booking::findByReviewKey($reviewKey) ?? abort(Response::HTTP_NOT_FOUND);
+        return new BookingByReview(Booking::findByReviewKey($reviewKey)) ?? abort(Response::HTTP_NOT_FOUND);
     }
 }
