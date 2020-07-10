@@ -51,7 +51,7 @@
 
         computed: {
             rating() {
-                if(Array.isArray(this.reviews)) {
+                if(Array.isArray(this.reviews) && this.reviews.length > 0) {
                     let rating = 0;
                     let count = 0;
                     this.reviews.forEach(function(item) {

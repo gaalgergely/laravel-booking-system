@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row" v-if="error">Unknown error has occured, please try again later.</div>
+        <fatal-error v-if="error"></fatal-error>
         <div class="row" v-else>
             <div :class="[{'col-md-4': twoColumns}, {'d-none': oneColumn}]">
                 <div class="card">
@@ -29,10 +29,19 @@
                         </div>
                         <div class="form-group">
                             <label for="content" class="text-muted">Describe your experience with</label>
-                            <textarea id="content" name="content" cols="30" rows="10" class="form-control" v-model="review.content"></textarea>
+                            <textarea
+                                id="content"
+                                name="content"
+                                cols="30"
+                                rows="10"
+                                class="form-control"
+                                v-model="review.content"
+                                :class="[{'is-invalid': errorFor('content')}]"
+                            ></textarea>
+                            <validation-errors :errors="errorFor('content')"></validation-errors>
                         </div>
 
-                        <button class="btn btn-lg btn-primary btn-block" @click.prevent="submit" :disabled="loading">Submit</button>
+                        <button class="btn btn-lg btn-primary btn-block" @click.prevent="submit" :disabled="sending">Submit</button>
                     </div>
                 </div>
             </div>
@@ -42,10 +51,13 @@
 
 <script>
 
-    import { is404 } from "./../shared/utils/response";
+    import { is404, is422 } from "./../shared/utils/response";
+    import validationErrors from "../shared/mixins/validationErrors";
 
     export default {
         name: "Review",
+
+        mixins: [validationErrors],
 
         data() {
             return {
@@ -57,7 +69,8 @@
                 existingReview: null,
                 loading:false,
                 booking: null,
-                error: false
+                error: false,
+                sending:false
             };
         },
         computed: {
@@ -77,37 +90,56 @@
                 return this.loading || !this.alreadyReviewed;
             }
         },
-        created() {
+        async created() {
+
             this.review.id = this.$route.params.id;
             this.loading = true;
 
-            axios
-                .get('/api/reviews/' + this.review.id)
-                .then(response => { this.existingReview = response.data.data })
-                .catch(error => {
-                    if (is404(error)) {
-                        return axios
-                                .get('/api/booking-by-review/' + this.review.id)
-                                .then(response => {
-                                    this.booking = response.data.data;
-                                })
-                                .catch((error) => {
-                                    this.error = !is404(error);
-                                });
+            try {
+                this.existingReview = await (axios.get('/api/reviews/' + this.review.id)).data.data;
+
+            } catch (error) {
+
+                console.log(error);
+
+                if (is404(error)) {
+
+                    //console.log(error);
+
+                    try {
+                        this.booking = await axios.get('/api/booking-by-review/' + this.review.id).data.data;
+
+                    } catch (error) {
+
+                        alert('error');
+                        this.error = true;
                     }
 
+                } else {
                     this.error = true;
-                })
-                .then(() => { this.loading = false; });
+                }
+            }
+            this.loading = false;
         },
 
         methods: {
             submit() {
-                this.loading = true;
+                this.sending = true;
                 axios.post('/api/reviews', this.review)
-                    .then()
-                    .catch((error) => this.error = true)
-                    .then(() => this.loading = false);
+                    .then(response => console.log(response))
+                    .catch(error => {
+                        if (is422(error)) {
+                            const errors = error.response.data.errors;
+
+                            if (errors.content && _.size(errors)===1) {
+                                this.errors = errors;
+                            }
+
+                            return;
+                        }
+                        this.error = true;
+                    })
+                    .then(() => this.sending = false);
             }
         }
     }
