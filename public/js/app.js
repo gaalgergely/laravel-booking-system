@@ -2439,54 +2439,52 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this.loading = true;
               _context.prev = 2;
               _context.next = 5;
-              return axios.get('/api/reviews/' + _this.review.id).data.data;
+              return axios.get('/api/reviews/' + _this.review.id);
 
             case 5:
-              _this.existingReview = _context.sent;
-              _context.next = 25;
+              _this.existingReview = _context.sent.data.data;
+              _context.next = 23;
               break;
 
             case 8:
               _context.prev = 8;
               _context.t0 = _context["catch"](2);
-              console.log(_context.t0);
 
               if (!Object(_shared_utils_response__WEBPACK_IMPORTED_MODULE_1__["is404"])(_context.t0)) {
-                _context.next = 24;
+                _context.next = 22;
                 break;
               }
 
-              _context.prev = 12;
-              _context.next = 15;
-              return axios.get('/api/booking-by-review/' + _this.review.id).data.data;
+              _context.prev = 11;
+              _context.next = 14;
+              return axios.get('/api/booking-by-review/' + _this.review.id);
 
-            case 15:
-              _this.booking = _context.sent;
-              _context.next = 22;
+            case 14:
+              _this.booking = _context.sent.data.data;
+              _context.next = 20;
               break;
 
-            case 18:
-              _context.prev = 18;
-              _context.t1 = _context["catch"](12);
-              alert('error');
+            case 17:
+              _context.prev = 17;
+              _context.t1 = _context["catch"](11);
               _this.error = true;
+
+            case 20:
+              _context.next = 23;
+              break;
 
             case 22:
-              _context.next = 25;
-              break;
-
-            case 24:
               _this.error = true;
 
-            case 25:
+            case 23:
               _this.loading = false;
 
-            case 26:
+            case 24:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 8], [12, 18]]);
+      }, _callee, null, [[2, 8], [11, 17]]);
     }))();
   },
   methods: {

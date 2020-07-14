@@ -96,22 +96,17 @@
             this.loading = true;
 
             try {
-                this.existingReview = await (axios.get('/api/reviews/' + this.review.id)).data.data;
+                this.existingReview = (await axios.get('/api/reviews/' + this.review.id)).data.data;
 
             } catch (error) {
 
-                console.log(error);
-
                 if (is404(error)) {
 
-                    //console.log(error);
-
                     try {
-                        this.booking = await axios.get('/api/booking-by-review/' + this.review.id).data.data;
+                        this.booking = (await axios.get('/api/booking-by-review/' + this.review.id)).data.data;
 
                     } catch (error) {
 
-                        alert('error');
                         this.error = true;
                     }
 
