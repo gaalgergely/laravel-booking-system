@@ -53,7 +53,7 @@
         mixins: [validationErrors],
 
         props: {
-            bookableId: Number
+            bookableId: [String, Number]
         },
 
         data: function () {

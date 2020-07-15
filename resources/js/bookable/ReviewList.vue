@@ -39,7 +39,7 @@
         },*/
 
         props: {
-            bookableId: Number
+            bookableId: [String, Number]
         },
 
         data() {
