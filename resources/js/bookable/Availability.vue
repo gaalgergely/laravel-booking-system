@@ -2,8 +2,10 @@
     <div>
         <h6 class="text-uppercase text-secondary font-weight-bolder">
             Check Availability
-            <span v-if="noAvailability" class="text-danger">(NOT AVAILABLE)</span>
-            <span v-if="hasAvailability" class="text-success">(AVAILABLE)</span>
+            <transition name="fade">
+                <span v-if="noAvailability" class="text-danger">(NOT AVAILABLE)</span>
+                <span v-if="hasAvailability" class="text-success">(AVAILABLE)</span>
+            </transition>
         </h6>
         <div class="form-row">
             <div class="form-group col-md-6">
@@ -35,17 +37,23 @@
                 <validation-errors :errors="errorFor('to')"></validation-errors>
             </div>
         </div>
+        <!-- can be a shared component -->
         <button
             type="button"
             class="btn btn-secondary btn-block"
             @click="check"
             :disabled="loading"
-        >Check!</button>
+        >
+            <span v-if="!loading">Check!</span>
+            <span v-else><i class="fas fa-circle-notch fa-spin"></i></span>
+        </button>
+        <!-- can be a shared component -->
     </div>
 </template>
 
 <script>
     import validationErrors from "../shared/mixins/validationErrors";
+    import { is422 } from "./../shared/utils/response";
 
     export default {
         name: "Availability",
@@ -66,28 +74,30 @@
         },
 
         methods: {
-            check: function () {
+            async check () {
                 this.loading = true;
                 this.errors = null;
 
                 this.$store.dispatch('setLastSearch', {from: this.from, to: this.to});
 
-                axios.get(
-                    '/api/bookables/' + this.bookableId + '/availability?from=' + this.from + '&to=' + this.to
-                ).then(response => {
-                    this.status = response.status;
-                }).catch(error => {
-                    if(422 === error.response.status) {
+                try {
+                    this.status = (await axios.get('/api/bookables/' + this.bookableId + '/availability?from=' + this.from + '&to=' + this.to)).status;
+
+                    this.$emit('availability', this.hasAvailability)
+
+                } catch(error) {
+
+                    if(is422(error)) {
                         this.errors = error.response.data.errors;
                     }
                     this.status = error.response.status;
-                }).then(() => this.loading = false);
+                    this.$emit('availability', this.hasAvailability)
+                }
+
+                this.loading = false;
             }
         },
         computed: {
-            hasErrors: function () {
-                return 422 === this.status && this.errors !== null;
-            },
             hasAvailability: function () {
                 return 200 === this.status;
             },
