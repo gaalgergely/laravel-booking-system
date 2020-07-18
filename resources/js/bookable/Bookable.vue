@@ -19,9 +19,16 @@
             <transition name="fade">
                 <div v-if="price">
                     <price-breakdown :price="price" class="mb-4"></price-breakdown>
-                    <button class="btn btn-outline-secondary btn-block">Book now</button>
+                    <button class="btn btn-outline-secondary btn-block" @click="addToBasket" :disabled="inBasketAlready">Book now</button>
                 </div>
             </transition>
+
+            <button class="btn btn-outline-secondary btn-block mt-4" v-if="inBasketAlready" @click="removeFromBasket">Remove from basket</button>
+
+            <div v-if="inBasketAlready" class="mt-4 text-muted warning">
+                Seems like you have added this object to the basket already.
+                If you want to change dates, remove from the basket first.
+            </div>
         </div>
     </div>
     <div v-else>Loading ...</div>
@@ -61,7 +68,15 @@
 
         computed: {
             ...mapState({
-                lastSearch: 'lastSearch'
+                lastSearch: 'lastSearch',
+                inBasketAlready(state) {
+                    if (null === this.bookable) {
+                        return false;
+                    }
+                    return state.basket.items.reduce(
+                        (result, item) => result || item.bookable.id === this.bookable.id, false
+                    );
+                }
             })
         },
 
@@ -80,11 +95,23 @@
 
                     this.price = null;
                 }
+            },
+            addToBasket() {
+                this.$store.commit('addToBasket', {
+                    bookable: this.bookable,
+                    price: this.price,
+                    date: this.lastSearch
+                });
+            },
+            removeFromBasket() {
+                this.$store.commit('removeFromBasket', this.bookable.id);
             }
         }
     }
 </script>
 
 <style scoped>
-
+    .warning {
+        font-size: 0.7rem;
+    }
 </style>
