@@ -38,7 +38,7 @@
     import Availability from "./Availability";
     import ReviewList from "./ReviewList";
     import PriceBreakdown from "./PriceBreakdown";
-    import { mapState } from 'vuex';
+    import { mapState } from "vuex";
 
     export default {
         name: "Bookable",
@@ -69,15 +69,13 @@
         computed: {
             ...mapState({
                 lastSearch: 'lastSearch',
-                inBasketAlready(state) {
-                    if (null === this.bookable) {
-                        return false;
-                    }
-                    return state.basket.items.reduce(
-                        (result, item) => result || item.bookable.id === this.bookable.id, false
-                    );
+            }),
+            inBasketAlready() {
+                if (null === this.bookable) {
+                    return false;
                 }
-            })
+                return this.$store.getters.inBasketAlready(this.bookable.id)
+            }
         },
 
         methods: {
@@ -97,14 +95,14 @@
                 }
             },
             addToBasket() {
-                this.$store.commit('addToBasket', {
+                this.$store.dispatch('addToBasket', {
                     bookable: this.bookable,
                     price: this.price,
                     date: this.lastSearch
                 });
             },
             removeFromBasket() {
-                this.$store.commit('removeFromBasket', this.bookable.id);
+                this.$store.dispatch('removeFromBasket', this.bookable.id);
             }
         }
     }
