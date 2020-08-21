@@ -2,7 +2,53 @@
     <div>
         <div class="row">
             <div class="col-md-8">
-                Checkout form
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputFirstName">First name</label>
+                            <input type="text" class="form-control" id="inputFirstName">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputLastName">Last name</label>
+                            <input type="text" class="form-control" id="inputLastName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">Email</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputCity">City</label>
+                            <input type="text" class="form-control" id="inputCity" placeholder="">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputStreet">Street</label>
+                            <input type="text" class="form-control" id="inputStreet" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputCountry">Country</label>
+                            <input type="text" class="form-control" id="inputCountry">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputState">State</label>
+                            <select id="inputState" class="form-control">
+                                <option selected>Choose...</option>
+                                <option>...</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="inputZip">Zip</label>
+                            <input type="text" class="form-control" id="inputZip">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Book now!</button>
+                    </div>
+                </form>
             </div>
             <div class="col-md-4">
                 <div class="d-flex justify-content-between">
