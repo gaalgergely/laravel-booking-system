@@ -61407,20 +61407,20 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("div", { staticClass: "form-row" }, [
           _c("div", { staticClass: "form-group col-md-6" }, [
-            _c("label", { attrs: { for: "inputCity" } }, [_vm._v("City")]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", id: "inputCity", placeholder: "" }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group col-md-6" }, [
             _c("label", { attrs: { for: "inputStreet" } }, [_vm._v("Street")]),
             _vm._v(" "),
             _c("input", {
               staticClass: "form-control",
               attrs: { type: "text", id: "inputStreet", placeholder: "" }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-md-6" }, [
+            _c("label", { attrs: { for: "inputCity" } }, [_vm._v("City")]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "text", id: "inputCity", placeholder: "" }
             })
           ])
         ]),

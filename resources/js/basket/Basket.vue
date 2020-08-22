@@ -19,12 +19,12 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="inputCity">City</label>
-                            <input type="text" class="form-control" id="inputCity" placeholder="">
-                        </div>
-                        <div class="form-group col-md-6">
                             <label for="inputStreet">Street</label>
                             <input type="text" class="form-control" id="inputStreet" placeholder="">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputCity">City</label>
+                            <input type="text" class="form-control" id="inputCity" placeholder="">
                         </div>
                     </div>
                     <div class="form-row">
