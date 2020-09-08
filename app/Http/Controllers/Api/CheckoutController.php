@@ -39,7 +39,7 @@ class CheckoutController extends Controller
         $bookings = collect($bookingsData)->map(function ($bookingData) use ($addressData) {
 
             $bookable = Bookable::findOrFail($bookingData['bookable_id']);
-            
+
             $booking = new Booking();
             $booking->from = $bookingData['from'];
             $booking->to = $bookingData['to'];

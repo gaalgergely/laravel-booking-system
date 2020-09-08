@@ -1,54 +1,123 @@
 <template>
     <div>
-        <div class="row">
+        <success v-if="success">
+            Congratulations on your purchase!
+        </success>
+        <div class="row" v-else>
             <div class="col-md-8">
-                <form>
+                <form v-if="itemsInTheBasket">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputFirstName">First name</label>
-                            <input type="text" class="form-control" id="inputFirstName">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="inputFirstName"
+                                v-model="customer.first_name"
+                                :class="[{'is-invalid': errorFor('customer.first_name')}]"
+                            >
+                            <validation-errors :errors="errorFor('customer.first_name')"></validation-errors>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputLastName">Last name</label>
-                            <input type="text" class="form-control" id="inputLastName">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="inputLastName"
+                                v-model="customer.last_name"
+                                :class="[{'is-invalid': errorFor('customer.last_name')}]"
+                            >
+                            <validation-errors :errors="errorFor('customer.last_name')"></validation-errors>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputEmail">Email</label>
-                        <input type="email" class="form-control" id="inputEmail" placeholder="">
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="inputEmail"
+                            placeholder=""
+                            v-model="customer.email"
+                            :class="[{'is-invalid': errorFor('customer.email')}]"
+                        >
+                        <validation-errors :errors="errorFor('customer.email')"></validation-errors>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputStreet">Street</label>
-                            <input type="text" class="form-control" id="inputStreet" placeholder="">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="inputStreet"
+                                placeholder=""
+                                v-model="customer.street"
+                                :class="[{'is-invalid': errorFor('customer.street')}]"
+                            >
+                            <validation-errors :errors="errorFor('customer.street')"></validation-errors>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputCity">City</label>
-                            <input type="text" class="form-control" id="inputCity" placeholder="">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="inputCity"
+                                placeholder=""
+                                v-model="customer.city"
+                                :class="[{'is-invalid': errorFor('customer.city')}]"
+                            >
+                            <validation-errors :errors="errorFor('customer.city')"></validation-errors>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputCountry">Country</label>
-                            <input type="text" class="form-control" id="inputCountry">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="inputCountry"
+                                v-model="customer.country"
+                                :class="[{'is-invalid': errorFor('customer.country')}]"
+                            >
+                            <validation-errors :errors="errorFor('customer.country')"></validation-errors>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputState">State</label>
-                            <select id="inputState" class="form-control">
-                                <option selected>Choose...</option>
-                                <option>...</option>
-                            </select>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="inputState"
+                                v-model="customer.state"
+                                :class="[{'is-invalid': errorFor('customer.state')}]"
+                            >
+                            <validation-errors :errors="errorFor('customer.state')"></validation-errors>
                         </div>
                         <div class="form-group col-md-2">
                             <label for="inputZip">Zip</label>
-                            <input type="text" class="form-control" id="inputZip">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="inputZip"
+                                v-model="customer.zip"
+                                :class="[{'is-invalid': errorFor('customer.zip')}]"
+                            >
+                            <validation-errors :errors="errorFor('customer.zip')"></validation-errors>
                         </div>
                     </div>
                     <hr>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">Book now!</button>
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg btn-block"
+                            @click.prevent="book"
+                            :disabled="loading"
+                        >Book now!</button>
                     </div>
                 </form>
+
+                <div v-else class="jumbotron text-center">
+                    <h1>Your basket is empty.</h1>
+                </div>
+
             </div>
             <div class="col-md-4">
                 <div class="d-flex justify-content-between">
@@ -91,15 +160,73 @@
 
 <script>
     import { mapGetters, mapState } from "vuex";
+    import validationErrors from "../shared/mixins/validationErrors";
 
     export default {
         name: "Basket",
+
+        mixins: [validationErrors],
+
+        data() {
+            return {
+                loading: false,
+
+                bookingAttempted: false,
+
+                customer: {
+                    first_name: null,
+                    last_name: null,
+                    email: null,
+                    street: null,
+                    city: null,
+                    country: null,
+                    state: null,
+                    zip: null
+                }
+            }
+        },
 
         computed: {
             ...mapGetters(["itemsInTheBasket"]),
             ...mapState({
                 basket: state => state.basket.items
-            })
+            }),
+            success() {
+                return !this.loading && 0===this.itemsInTheBasket && !this.bookingAttempted
+            }
+        },
+
+        methods: {
+            async book() {
+
+                this.loading = true;
+                this.errors = null;
+                this.bookingAttempted = false;
+
+                try {
+
+                    await axios.post('/api/checkout', {
+
+                        customer: this.customer,
+                        bookings: this.basket.map(basketItem => ({
+
+                            bookable_id: basketItem.bookable.id,
+                            from: basketItem.date.from,
+                            to: basketItem.date.to
+                        }))
+
+                    });
+
+                    this.$store.dispatch('clearBasket');
+
+                } catch (error) {
+
+                    this.errors = error.response && error.response.data.errors
+                }
+
+                this.loading = false;
+                this.bookingAttempted = true;
+            }
         }
     }
 </script>
