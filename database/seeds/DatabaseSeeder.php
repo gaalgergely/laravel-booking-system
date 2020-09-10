@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
          * php artisan migrate:refresh --seed
          */
         $this->call([
+            UsersTableSeeder::class,
             BookablesTableSeeder::class,
             BookingsTableSeeder::class,
             ReviewsTableSeeder::class
